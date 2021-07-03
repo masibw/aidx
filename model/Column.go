@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/pingcap/parser/ast"
 )
 
@@ -9,8 +10,25 @@ type colX struct {
 }
 
 func (v *colX) Enter(in ast.Node) (ast.Node, bool) {
-	if name, ok := in.(*ast.ColumnName); ok {
-		v.colNames = append(v.colNames, name.Name.O)
+	if boExpr, ok := in.(*ast.BinaryOperationExpr); ok {
+
+		switch boExpr.Op.String() {
+		case "eq":
+			if leftExpr, ok := boExpr.L.(*ast.ColumnNameExpr); ok {
+				v.colNames = append([]string{leftExpr.Name.Name.O}, v.colNames...)
+			} else if rightExpr, ok := boExpr.R.(*ast.ColumnNameExpr); ok {
+				v.colNames = append([]string{rightExpr.Name.Name.O}, v.colNames...)
+
+			}
+		case "gt", "ge", "lt", "le":
+			if leftExpr, ok := boExpr.L.(*ast.ColumnNameExpr); ok {
+				v.colNames = append(v.colNames, leftExpr.Name.Name.O)
+			} else if rightExpr, ok := boExpr.R.(*ast.ColumnNameExpr); ok {
+				v.colNames = append([]string{rightExpr.Name.Name.O}, v.colNames...)
+			}
+		default:
+			fmt.Println("unsupported expressions: ", boExpr.Op.String())
+		}
 	}
 	return in, false
 }

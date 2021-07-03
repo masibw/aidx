@@ -15,7 +15,11 @@ func TestGenIndex(t *testing.T) {
 		},
 		{
 			name:    "Return Index for simple query with AND expression.",
-			query:   "SELECT * FROM users WHERE name = 'hoge' AND age = 20;",
+			query:   "SELECT * FROM users WHERE age = 20 AND name = 'hoge';",
+			wantIdx: "CREATE INDEX idx ON users(name, age);",
+		}, {
+			name:    "Return Index for simple query with AND expression with range conditions.",
+			query:   "SELECT * FROM users WHERE age > 20 AND name = 'hoge';",
 			wantIdx: "CREATE INDEX idx ON users(name, age);",
 		},
 	}
