@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"aidx/model"
 	"fmt"
+	"github.com/masibw/aidx/model"
 	"strings"
 )
 

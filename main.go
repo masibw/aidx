@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aidx/cmd"
+	"github.com/masibw/aidx/cmd"
 	"os"
 )
 

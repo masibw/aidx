@@ -1,4 +1,4 @@
-module aidx
+module github.com/masibw/aidx
 
 go 1.16
 
